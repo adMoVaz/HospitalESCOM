@@ -3,8 +3,37 @@ from datetime import date
 
 
 # Create your models here.
+class Datos(models.Model):
+    id_datos = models.AutoField(primary_key=True, verbose_name="ID de datos")
+    nombre = models.CharField(max_length=20, verbose_name="Nombre")
+    apellido_paterno = models.CharField(max_length=20, verbose_name="Apellido paterno")
+    apellido_materno = models.CharField(max_length=20, verbose_name="Apellido materno")
+    curp = models.CharField(max_length=18, unique=True, verbose_name="CURP")
+    fecha_nacimiento = models.DateField(verbose_name="Fecha de nacimiento")
+    telefono_movil = models.IntegerField(verbose_name="Teléfono móvil")
+    telefono_fijo = models.IntegerField(verbose_name="Teléfono fijo")
+    email = models.EmailField(unique=True, verbose_name="Correo electrónico")
+    password = models.CharField(max_length=20, verbose_name="Contraseña", null=True, blank=True)
+    fecha_registro = models.DateField(verbose_name="Fecha de registro", null=True, blank=True, default=date.today)
+    last_login = models.DateTimeField(verbose_name="Último inicio de sesión", null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.nombre} {self.apellido_paterno} {self.apellido_materno}"
+
+    class Meta:
+        verbose_name = "Información de usuario"
+        verbose_name_plural = "Información de usuarios"
+
+
 class Direccion(models.Model):
-    id_dominilio = models.AutoField(primary_key=True, verbose_name="ID del domicilio")
+    id_domicilio = models.AutoField(primary_key=True, verbose_name="ID del domicilio")
+    id_datos = models.ForeignKey(
+        Datos,
+        on_delete=models.CASCADE,
+        verbose_name="Datos relacionados",
+        null=True,
+        blank=True
+    )
     calle = models.CharField(max_length=100, verbose_name="Calle")
     numero_exterior = models.IntegerField(verbose_name="Número exterior")
     numero_interior = models.CharField(max_length=10, verbose_name="Número interior")
@@ -20,33 +49,6 @@ class Direccion(models.Model):
     class Meta:
         verbose_name = "Domicilio"
         verbose_name_plural = "Domicilios"
-
-
-class Datos(models.Model):
-    id_datos = models.AutoField(primary_key=True, verbose_name="ID de datos")
-    id_domicilio = models.ForeignKey(
-        Direccion,
-        on_delete=models.CASCADE,
-        verbose_name="Domicilio relacionado",
-        null= True
-    )
-    nombre = models.CharField(max_length=20, verbose_name="Nombre")
-    apellido_paterno = models.CharField(max_length=20, verbose_name="Apellido paterno")
-    apellido_materno = models.CharField(max_length=20, verbose_name="Apellido materno")
-    curp = models.CharField(max_length=18, unique=True, verbose_name="CURP")
-    fecha_nacimiento = models.DateField(verbose_name="Fecha de nacimiento")
-    telefono_movil = models.IntegerField(verbose_name="Teléfono móvil")
-    telefono_fijo = models.IntegerField(verbose_name="Teléfono fijo")
-    email = models.EmailField(verbose_name="Correo electrónico")
-    fecha_registro = models.DateField(
-        verbose_name="Fecha de registro", null=True, blank=True, default=date.today)
-
-    def __str__(self):
-        return f"{self.nombre} {self.apellido_paterno} {self.apellido_materno}"
-
-    class Meta:
-        verbose_name = "Información de usuario"
-        verbose_name_plural = "Información de usuarios"
 
 
 class Especialidad(models.Model):

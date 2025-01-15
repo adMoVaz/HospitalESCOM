@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresar Datos del Paciente</title>
+    <link rel="stylesheet" href="{% static 'archives/css/contacto.css' %}">
+</head>
+<body>
+    <div class="modificar-datos-container">
+        <h1 class="modificar-datos-title">Sign Up</h1>
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="Rectangulo">
+                <h3>Datos Personales</h3>
+                <label for="nombre">Nombre:</label>
+                <label for="nombre">
+                    <input type="text" id="nombre" name="nombre" required/><br>
+                </label>
+
+                <label>Apellido Paterno:</label>
+                <label for="apellido_paterno">
+                    <input type="text" id="apellido_paterno" name="apellido_paterno" required/><br>
+                </label>
+
+                <label>Apellido Materno:</label>
+                <label for="apellido_materno">
+                    <input type="text" id="apellido_materno" name="apellido_materno" required/><br>
+                </label>
+
+                <label>CURP:</label>
+                <label for="curp">
+                    <input type="text" id="curp" name="curp" required/><br>
+                </label>
+
+                <label>Fecha Nacimiento:</label>
+                <label for="fecha_nacimiento">
+                    <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required/><br>
+                </label>
+
+                <label>No. Móvil:</label>
+                <label for="telefono_movil">
+                    <input type="number" id="telefono_movil" name="telefono_movil" required/><br>
+                </label>
+
+                <label>No. Fijo:</label>
+                <label for="telefono_fijo">
+                    <input type="number" id="telefono_fijo" name="telefono_fijo" required/><br>
+                </label>
+
+                <label >Correo Electrónico:</label>
+                <label for="email">
+                    <input type="email" id="email" name="email" required/><br>
+                </label>
+
+                <label >Contraseña:</label>
+                <label for="password">
+                    <input type="password" id="password" name="password" required/><br>
+                </label>
+
+                <label>Fecha Registro:</label>
+                <label for="fecha_registro">
+                    <input type="date" id="fecha_registro" name="fecha_registro" required/><br>
+                </label>
+
+                <button type="submit">Guardar</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

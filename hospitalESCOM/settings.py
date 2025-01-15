@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-@1d_xcuenmr1v%3)r1jqmk3v701by_5*an7b31u%w28=&06dve
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -111,6 +111,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTHENTICATION_BACKENDS = ['operation.backends.DatosAuthBackend']
 
 
 # Internationalization

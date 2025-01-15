@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingresar Datos del Paciente</title>
+    <link rel="stylesheet" href="{% static 'archives/css/domicilio.css' %}">
+</head>
+<body>
+    <div class="modificar-datos-container">
+        <h1 class="modificar-datos-title">Sign Up</h1>
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="Rectangulo">
+                <h3>Domicilio</h3>
+                <label for="calle">Calle:</label>
+                <label for="calle">
+                    <input type="text" id="calle" name="calle" required/><br>
+                </label>
+
+                <label>Colonia:</label>
+                <label for="colonia">
+                    <input type="text" id="colonia" name="colonia" required/><br>
+                </label>
+
+                <label>No. Exterior:</label>
+                <label for="numero_exterior">
+                    <input type="number" id="numero_exterior" name="numero_exterior" required/><br>
+                </label>
+
+                <label>No. Interior:</label>
+                <label for="numero_interior">
+                    <input type="number" id="numero_interior" name="numero_interior" required/><br>
+                </label>
+
+                <label >Código Postal:</label>
+                <label for="codigo_postal">
+                    <input type="number" id="codigo_postal" name="codigo_postal" required/><br>
+                </label>
+
+                <label>Municipio:</label>
+                <label for="municipio">
+                    <input type="text" id="municipio" name="municipio" required/><br>
+                </label>
+
+                <label>Estado:</label>
+                <label for="entidad_federativa">
+                    <input type="text" id="entidad_federativa" name="entidad_federativa" required/><br>
+                </label>
+
+                <label>País:</label>
+                <label for="pais">
+                    <input type="text" id="pais" name="pais" required/><br>
+                </label>
+                <button type="submit">Guardar</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

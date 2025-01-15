@@ -21,14 +21,17 @@ class TipoUsuario(models.Model):
 class Paciente(models.Model):
     id_datos = models.ForeignKey(Datos, on_delete=models.CASCADE, verbose_name="Datos del paciente")
     id_paciente = models.AutoField(primary_key=True, verbose_name="ID del paciente")
-    id_usuario = models.ForeignKey(TipoUsuario, on_delete=models.CASCADE, verbose_name="Tipo de usuario")
+    id_usuario = models.ForeignKey(
+        TipoUsuario,
+        on_delete=models.PROTECT,
+        verbose_name="Tipo de usuario",
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return f"{self.id_datos.nombre} {self.id_datos.apellido_paterno} {self.id_datos.apellido_materno}"
 
-    class Meta:
-        verbose_name = "Paciente"
-        verbose_name_plural = "Pacientes"
 
 
 class Trabajador(models.Model):
