@@ -8,4 +8,6 @@ urlpatterns = [
     path("signup/domicilio/<int:id_datos>/", views.domicilio, name="domicilio"),
     path("misdatos/<int:id_datos>/", views.mostrar_datos, name='misdatos'),
     path("login/", views.iniciar_sesion, name="login"),
+    path("perfil/", views.perfil, name="perfil"),
+    path("logout/", views.cerrar_sesion, name="logout"),
 ]

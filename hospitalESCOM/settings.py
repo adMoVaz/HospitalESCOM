@@ -29,6 +29,16 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+LOGIN_URL = '/operation/login/'
+
+# La sesión expirará después de 2 semanas de inactividad
+SESSION_COOKIE_AGE = 1209600  # 2 semanas en segundos
+
+# Permitir que la sesión persista incluso si se cierra el navegador
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# Usar sesiones basadas en la base de datos
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 INSTALLED_APPS = [
     'django.contrib.admin',

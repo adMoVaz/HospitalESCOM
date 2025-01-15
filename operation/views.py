@@ -1,6 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from django.contrib import messages
 from users.models import *
 
@@ -81,17 +79,32 @@ def mostrar_datos(request, id_datos):
     return render(request, 'archives/mostrardatos.html', {'datos': dat})
 
 
+def perfil(request):
+    usuario_id = request.session.get('usuario_id')
+    if not usuario_id:
+        return redirect('operation:login')  # Redirigir al login si no hay sesión
+
+    data = Datos.objects.get(id_datos=usuario_id)
+    return render(request, 'archives/mostrardatos.html', {'datos': data})
+
+
 def iniciar_sesion(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        user = authenticate(request, username=email, password=password)
-        if user is not None:
-            login(request, user, backend='users.backends.DatosAuthBackend')
-            return redirect('core:core')
-        else:
-            messages.error(request, 'Correo o contraseña incorrectos')
+        try:
+            usuario = Datos.objects.get(email=email)
+            if usuario.password == password:
+                request.session['usuario_id'] = usuario.id_datos
+                return redirect('operation:perfil')
+            else:
+                messages.error(request, 'Contraseña incorrecta')
+        except Datos.DoesNotExist:
+            messages.error(request, 'Usuario no encontrado')
 
     return render(request, 'operation/login.html')
 
 
+def cerrar_sesion(request):
+    request.session.flush()  # Eliminar toda la sesión
+    return redirect('operation:login')

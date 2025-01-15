@@ -20,6 +20,7 @@
         <p><strong>Correo Electrónico:</strong> {{ datos.email }}</p>
         <p><strong>Contraseña:</strong> {{ datos.password }}</p>
         <p><strong>Fecha de Registro:</strong> {{ datos.fecha_registro }}</p>
+        <a href="{% url 'operation:logout' %}">Cerrar sesión</a>
     </div>
 </body>
 </html>
