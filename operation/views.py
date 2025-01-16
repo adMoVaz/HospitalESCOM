@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from users.models import *
+from archives.models import *
 
 
 def datos(request):
@@ -74,21 +75,23 @@ def domicilio(request, id_datos):
     return render(request, 'archives/domicilio.html')
 
 
-def mostrar_datos(request, id_datos):
-    dat = get_object_or_404(Datos, id_datos=id_datos)
-    return render(request, 'archives/mostrardatos.html', {'datos': dat})
-
-
-def perfil(request):
+def perfil_paciente(request):
     usuario_id = request.session.get('usuario_id')
     if not usuario_id:
-        return redirect('operation:login')  # Redirigir al login si no hay sesión
-
+        return redirect('operation:login/paciente')
     data = Datos.objects.get(id_datos=usuario_id)
-    return render(request, 'archives/mostrardatos.html', {'datos': data})
+    try:
+        direccion = Direccion.objects.get(id_datos=usuario_id)
+    except Direccion.DoesNotExist:
+        direccion = None
+    return render(request, 'archives/perfil_paciente.html', {'datos': data, 'direccion': direccion})
 
 
-def iniciar_sesion(request):
+def inicio_sesion_selector(request):
+    return render(request, 'operation/login_main.html')
+
+
+def iniciar_sesion_paciente(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -96,15 +99,63 @@ def iniciar_sesion(request):
             usuario = Datos.objects.get(email=email)
             if usuario.password == password:
                 request.session['usuario_id'] = usuario.id_datos
-                return redirect('operation:perfil')
+                return redirect('operation:perfil/paciente')
             else:
                 messages.error(request, 'Contraseña incorrecta')
         except Datos.DoesNotExist:
             messages.error(request, 'Usuario no encontrado')
 
-    return render(request, 'operation/login.html')
+    return render(request, 'operation/login_paciente.html')
+
+
+def iniciar_sesion_doctor(request):
+    if request.method == 'POST':
+        cedula = request.POST.get('cedula')
+        password = request.POST.get('password')
+        try:
+            doctor = Doctor.objects.get(cedula=cedula)
+            usuario = doctor.dni_trabajador.id_datos
+            if usuario.password == password:
+                request.session['doctor_id'] = doctor.id
+                request.session['doctor_nombre'] = f"{usuario.nombre} {usuario.apellido_paterno}"
+                return redirect('operation:perfil/doctor')
+            else:
+                messages.error(request, 'Contraseña incorrecta')
+        except Doctor.DoesNotExist:
+            messages.error(request, 'Doctor con esta cédula no encontrado')
+    return render(request, 'operation/login_doctor.html')
+
+
+def perfil_doctor(request):
+    doctor_id = request.session.get('doctor_id')
+    if not doctor_id:
+        messages.error(request, 'Debes iniciar sesión primero')
+        return redirect('operation:login/doctor')
+    doctor = Doctor.objects.get(id=doctor_id)
+    datos = doctor.dni_trabajador.id_datos
+    try:
+        direccion = Direccion.objects.get(id_datos=datos.id_datos)
+    except Direccion.DoesNotExist:
+        direccion = None
+    return render(request, 'archives/perfil_doctor.html', {'doctor': doctor, 'datos': datos, 'direccion': direccion})
 
 
 def cerrar_sesion(request):
-    request.session.flush()  # Eliminar toda la sesión
-    return redirect('operation:login')
+    request.session.flush()
+    return redirect('operation:login/select')
+
+
+def perfil_selector(request):
+    try:
+        if 'usuario_id' in request.session:
+            return redirect('operation:perfil/paciente')
+
+        elif 'doctor_id' in request.session:
+            return redirect('operation:perfil/doctor')
+
+    except Exception as e:
+        messages.error(request, 'Ocurrió un error. Por favor, inicia sesión nuevamente.')
+        return redirect('operation:login/select')
+
+    messages.error(request, 'Debes iniciar sesión primero')
+    return redirect('operation:login/select')

@@ -5,9 +5,12 @@ app_name = 'operation'
 
 urlpatterns = [
     path('signup/datos/', views.datos, name='signup'),
-    path("signup/domicilio/<int:id_datos>/", views.domicilio, name="domicilio"),
-    path("misdatos/<int:id_datos>/", views.mostrar_datos, name='misdatos'),
-    path("login/", views.iniciar_sesion, name="login"),
-    path("perfil/", views.perfil, name="perfil"),
+    path("signup/domicilio/", views.domicilio, name="domicilio"),
+    path("login/select", views.inicio_sesion_selector, name='login/select'),
+    path("login/paciente", views.iniciar_sesion_paciente, name="login/paciente"),
+    path("perfil/select", views.perfil_selector, name='perfil/select'),
+    path("perfil/paciente", views.perfil_paciente, name="perfil/paciente"),
+    path("login/doctor", views.iniciar_sesion_doctor, name="login/doctor"),
+    path("perfil/doctor", views.perfil_doctor, name="perfil/doctor"),
     path("logout/", views.cerrar_sesion, name="logout"),
 ]

@@ -33,7 +33,6 @@ class Paciente(models.Model):
         return f"{self.id_datos.nombre} {self.id_datos.apellido_paterno} {self.id_datos.apellido_materno}"
 
 
-
 class Trabajador(models.Model):
     id_datos = models.ForeignKey(Datos, on_delete=models.CASCADE, verbose_name="Datos del trabajador")
     dni_trabajador = models.CharField(max_length=20, primary_key=True, verbose_name="DNI del trabajador")

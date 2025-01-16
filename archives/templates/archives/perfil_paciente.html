@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Datos</title>
+    <link rel="stylesheet" href="{% static 'archives/css/perfil_paciente.css' %}">
+</head>
+<body>
+    <div class="mis-datos-container">
+        <h2 class="mis-datos-title">Mis Datos</h2>
+        <div class="mis-datos-rectangulo">
+            <div class="mis-datos-content">
+                <div class="mis-datos-column">
+                    <div class="mis-datos-item">
+                        <label>Nombre:</label>
+                        <span>{{ datos.nombre|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>Apellido Paterno:</label>
+                        <span>{{ datos.apellido_paterno|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>Apellido Materno:</label>
+                        <span>{{ datos.apellido_materno|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>Fecha de Nacimiento:</label>
+                        <span>{{ datos.fecha_nacimiento|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>CURP:</label>
+                        <span>{{ datos.curp|default:"No disponible" }}</span>
+                    </div>
+                </div>
+                <div class="mis-datos-column-right">
+                    <div class="mis-datos-item">
+                        <label>Teléfono Celular:</label>
+                        <span>{{ datos.telefono_movil|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>Teléfono Fijo:</label>
+                        <span>{{ datos.telefono_fijo|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>Correo Electrónico:</label>
+                        <span>{{ datos.email|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>Contraseña:</label>
+                        <span>{{ datos.password|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>Fecha de Registro:</label>
+                        <span>{{ datos.fecha_registro|default:"No disponible" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dirección -->
+        <h2 class="mis-datos-title">Dirección</h2>
+        <div class="mis-datos-rectangulo">
+            <div class="mis-datos-content">
+                <div class="mis-datos-column">
+                    <div class="mis-datos-item">
+                        <label>Calle:</label>
+                        <span>{{ direccion.calle|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>Colonia:</label>
+                        <span>{{ direccion.colonia|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>No. Exterior:</label>
+                        <span>{{ direccion.numero_exterior|default:"No disponible" }}</span>
+                    </div>
+                </div>
+                <div class="mis-datos-column">
+                    <div class="mis-datos-item">
+                        <label>No. Interior:</label>
+                        <span>{{ direccion.numero_interior|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>Código Postal:</label>
+                        <span>{{ direccion.codigo_postal|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>Municipio:</label>
+                        <span>{{ direccion.municipio|default:"No disponible" }}</span>
+                    </div>
+                </div>
+                <div class="mis-datos-column">
+                    <div class="mis-datos-item">
+                        <label>Estado:</label>
+                        <span>{{ direccion.entidad_federativa|default:"No disponible" }}</span>
+                    </div>
+                    <div class="mis-datos-item">
+                        <label>País:</label>
+                        <span>{{ direccion.pais|default:"No disponible" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de botones -->
+        <div class="action-section">
+            <a href="{% url 'core:core' %}" class="action-item">
+                <div class="icon">📜</div>
+                <p>Consultar Citas</p>
+            </a>
+            <div class="divider"></div>
+            <a href="{% url 'core:core' %}" class="action-item">
+                <div class="icon">📅</div>
+                <p>Agendar Citas</p>
+            </a>
+            <div class="divider"></div>
+            <a href="{% url 'core:core' %}" class="action-item">
+                <div class="icon">✏️</div>
+                <p>Modificar Datos</p>
+            </a>
+        </div>
+
+        <!-- Cerrar sesión -->
+        <div class="logout-section">
+            <a href="{% url 'operation:logout' %}" class="logout-link">Cerrar sesión</a>
+        </div>
+    </div>
+</body>
+</html>

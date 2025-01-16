@@ -1,0 +1,112 @@
+/* Estilos generales */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.mis-datos-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-top: 60px;
+}
+
+/* Títulos */
+.mis-datos-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #005F99;
+}
+
+/* Rectángulos */
+.mis-datos-rectangulo {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 1px solid #757575;
+  border-radius: 8px;
+  margin-bottom: 40px; /* Aumentado el margen entre rectángulos */
+}
+
+.mis-datos-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.mis-datos-column {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Estilos de los elementos */
+.mis-datos-item {
+  margin-bottom: 15px;
+}
+
+.mis-datos-item label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.mis-datos-item span {
+  display: block;
+  color: #555;
+}
+
+/* Action Section */
+.action-section {
+  width: 90%; /* Ancho del rectángulo */
+  margin: 40px auto; /* Espaciado adicional entre la sección y otros elementos */
+  background-color: #f9f9f9; /* Color de fondo del rectángulo */
+  border-radius: 8px; /* Bordes redondeados */
+  padding: 20px 0; /* Espaciado interno */
+  display: flex; /* Usamos flexbox para alinear elementos */
+  justify-content: space-around; /* Espaciado uniforme entre botones */
+  align-items: center; /* Centrado vertical */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  border: #505050 1px solid;
+}
+
+.action-item {
+  background: none; /* Sin fondo */
+  border: none; /* Sin bordes */
+  cursor: pointer; /* Muestra el cursor de mano */
+  text-align: center; /* Centra el texto y el icono */
+  flex: 1; /* Ocupa el mismo espacio proporcional */
+  font-family: Arial, sans-serif; /* Fuente estándar */
+  outline: none; /* Elimina contornos al hacer clic */
+  transition: transform 0.2s ease, background-color 0.2s ease; /* Animaciones suaves */
+}
+
+.action-item:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Fondo más oscuro al pasar el cursor */
+  transform: scale(0.85); /* Aumenta ligeramente el tamaño */
+}
+
+.icon {
+  font-size: 42px; /* Tamaño del icono */
+  margin-bottom: 20px; /* Espaciado entre el icono y el texto */
+}
+
+.action-item p {
+  font-size: 20px; /* Tamaño del texto */
+  color: #005F99; /* Color del texto */
+  margin: 0; /* Elimina márgenes extra */
+}
+
+.divider {
+  width: 2px; /* Grosor de la línea */
+  height: 50px; /* Altura de la línea */
+  background-color: #B3B3B3; /* Color de la línea */
+  margin: 0 20px; /* Espaciado horizontal aumentado */
+}
