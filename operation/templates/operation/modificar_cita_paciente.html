@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Cita</title>
+    <link rel="stylesheet" href="{% static 'operation/css/agendar_cita.css' %}">
+</head>
+<body>
+    <h1>Modificar Cita</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="especialidad">Especialidad:</label>
+            <select id="especialidad" name="especialidad" required>
+                <option value="" disabled>Seleccione una especialidad</option>
+                {% for especialidad in especialidades %}
+                    <option value="{{ especialidad.id_especialidad }}"
+                        {% if especialidad.id_especialidad == cita.id_doctor.id_especialidad.id_especialidad %}
+                            selected
+                        {% endif %}>
+                        {{ especialidad.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="doctor">Doctor:</label>
+            <select id="doctor" name="doctor" required>
+                <option value="" disabled>Seleccione un doctor</option>
+                {% for doctor in doctores %}
+                    <option value="{{ doctor.id }}"
+                        {% if doctor.id == cita.id_doctor.id %}
+                            selected
+                        {% endif %}>
+                        {{ doctor.dni_trabajador.id_datos.nombre }} - {{ doctor.id_especialidad.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="consultorio">Consultorio:</label>
+            <select id="consultorio" name="consultorio" required>
+                <option value="" disabled>Seleccione un consultorio</option>
+                {% for consultorio in consultorios %}
+                    <option value="{{ consultorio.id_consultorio }}"
+                        {% if consultorio.id_consultorio == cita.id_consultorio.id_consultorio %}
+                            selected
+                        {% endif %}>
+                        {{ consultorio.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" value="{{ cita.fecha }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="hora_inicio">Hora de Inicio:</label>
+            <input type="time" id="hora_inicio" name="hora_inicio" value="{{ cita.hora_inicio }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="hora_fin">Hora de Fin:</label>
+            <input type="time" id="hora_fin" name="hora_fin" value="{{ cita.hora_fin }}" required>
+        </div>
+
+        <button type="submit">Guardar Cambios</button>
+        <a href="{% url 'operation:citas/consultar/paciente' %}" class="btn">Cancelar</a>
+    </form>
+</body>
+</html>

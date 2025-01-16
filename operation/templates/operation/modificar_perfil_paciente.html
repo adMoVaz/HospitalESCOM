@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Datos</title>
+    <link rel="stylesheet" href="{% static 'operation/css/modificar_perfil_paciente.css' %}">
+</head>
+<body>
+    <div class="mis-datos-container">
+        <h2 class="mis-datos-title">Modificar Mis Datos</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mis-datos-rectangulo">
+                <h2 class="mis-datos-title">Datos Personales</h2>
+                <div class="mis-datos-content">
+                    <div class="mis-datos-column">
+                        <div class="mis-datos-item">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" name="nombre" value="{{ datos.nombre }}" required>
+                        </div>
+                        <div class="mis-datos-item">
+                            <label for="apellido_paterno">Apellido Paterno:</label>
+                            <input type="text" id="apellido_paterno" name="apellido_paterno" value="{{ datos.apellido_paterno }}" required>
+                        </div>
+                        <div class="mis-datos-item">
+                            <label for="apellido_materno">Apellido Materno:</label>
+                            <input type="text" id="apellido_materno" name="apellido_materno" value="{{ datos.apellido_materno }}" required>
+                        </div>
+                        <div class="mis-datos-item">
+                            <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+                            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ datos.fecha_nacimiento }}" required>
+                        </div>
+                    </div>
+                    <div class="mis-datos-column-right">
+                        <div class="mis-datos-item">
+                            <label for="curp">CURP:</label>
+                            <input type="text" id="curp" name="curp" value="{{ datos.curp }}" required>
+                        </div>
+                        <div class="mis-datos-item">
+                            <label for="telefono_movil">Teléfono Celular:</label>
+                            <input type="text" id="telefono_movil" name="telefono_movil" value="{{ datos.telefono_movil }}"required>
+                        </div>
+                        <div class="mis-datos-item">
+                            <label for="telefono_fijo">Teléfono Fijo:</label>
+                            <input type="text" id="telefono_fijo" name="telefono_fijo" value="{{ datos.telefono_fijo }}"required>
+                        </div>
+                        <div class="mis-datos-item">
+                            <label for="email">Correo Electrónico:</label>
+                            <input type="email" id="email" name="email" value="{{ datos.email }}" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mis-datos-rectangulo">
+                <h2 class="mis-datos-title">Dirección</h2>
+                <div class="mis-datos-content">
+                    <div class="mis-datos-column">
+                        <div class="mis-datos-item">
+                            <label for="calle">Calle:</label>
+                            <input type="text" id="calle" name="calle" value="{{ direccion.calle }}"required>
+                        </div>
+                        <div class="mis-datos-item">
+                            <label for="numero_exterior">No. Exterior:</label>
+                            <input type="text" id="numero_exterior" name="numero_exterior" value="{{ direccion.numero_exterior }}"required>
+                        </div>
+                        <div class="mis-datos-item">
+                            <label for="numero_interior">No. Interior:</label>
+                            <input type="text" id="numero_interior" name="numero_interior" value="{{ direccion.numero_interior }}"required>
+                        </div>
+                    </div>
+                    <div class="mis-datos-column-right">
+                        <div class="mis-datos-item">
+                            <label for="colonia">Colonia:</label>
+                            <input type="text" id="colonia" name="colonia" value="{{ direccion.colonia }}"required>
+                        </div>
+                        <div class="mis-datos-item">
+                            <label for="codigo_postal">Código Postal:</label>
+                            <input type="text" id="codigo_postal" name="codigo_postal" value="{{ direccion.codigo_postal }}"required>
+                        </div>
+                        <div class="mis-datos-item">
+                            <label for="municipio">Municipio:</label>
+                            <input type="text" id="municipio" name="municipio" value="{{ direccion.municipio }}"required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit">Guardar Cambios</button>
+            <a href="{% url 'operation:perfil/paciente' %}">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>

@@ -37,6 +37,9 @@
                            onclick="return confirm('¿Estás seguro de que deseas eliminar esta cita?');">
                             Eliminar
                         </a>
+                        <a href="{% url 'operation:citas/modificar' cita.id_cita %}">
+                            Modificar
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}
