@@ -8,7 +8,8 @@ class Citas(models.Model):
     id_cita = models.AutoField(primary_key=True, verbose_name="ID de la cita")
     id_doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, verbose_name="Doctor")
     id_paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name="Paciente")
-    id_consultorio = models.ForeignKey(Consultorio, on_delete=models.CASCADE, verbose_name="Consultorio", null=True, blank=True)
+    id_consultorio = models.ForeignKey(Consultorio, on_delete=models.CASCADE, verbose_name="Consultorio", null=True,
+                                       blank=True)
     estatus = models.BooleanField(default=False, verbose_name="Estatus de la cita")
     fecha = models.DateField(verbose_name="Fecha de la cita")
     hora_inicio = models.TimeField(verbose_name="Hora de inicio")
@@ -36,15 +37,18 @@ class Pago(models.Model):
 
 class Receta(models.Model):
     id_receta = models.AutoField(primary_key=True, verbose_name="ID de la receta")
-    id_tratamiento = models.ForeignKey('Tratamiento', on_delete=models.CASCADE, verbose_name="Tratamiento", null=True, blank=True)
-    estatus = models.BooleanField(default=False, verbose_name="Estatus de la receta")
+    id_doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, verbose_name="Doctor", null=True, blank=True)
+    id_paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name="Paciente", null=True, blank=True)
+    fecha_creacion = models.DateField(auto_now_add=True, verbose_name="Fecha de creación", null=True, blank=True)
+    receta_descripcion = models.CharField(max_length=500, verbose_name="Descripción de la receta", null=True,
+                                          blank=True)
 
     class Meta:
         verbose_name = "Receta"
         verbose_name_plural = "Recetas"
 
     def __str__(self):
-        return f"{self.id_receta} - {self.id_tratamiento}"
+        return f"Receta {self.id_receta} - {self.id_doctor.cedula} - {self.id_paciente.id_datos.nombre}"
 
 
 class Diagnostico(models.Model):

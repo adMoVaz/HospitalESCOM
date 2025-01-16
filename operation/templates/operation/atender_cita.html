@@ -10,40 +10,45 @@
 <body>
     <div class="container">
         <h1>Atender Cita</h1>
-        <p>Doctor: {{ cita.id_doctor.dni_trabajador.id_datos.nombre }} {{ cita.id_doctor.dni_trabajador.id_datos.apellido_paterno }}</p>
-        <p>Paciente: {{ cita.id_paciente.id_datos.nombre }} {{ cita.id_paciente.id_datos.apellido_paterno }}</p>
-        <p>Consultorio: {{ cita.id_consultorio }}</p>
-        <p>Fecha: {{ cita.fecha }}</p>
-        <p>Hora de inicio: {{ cita.hora_inicio }}</p>
-        <p>Hora de fin: {{ cita.hora_fin }}</p>
+        <p><strong>Doctor:</strong> {{ cita.id_doctor.dni_trabajador.id_datos.nombre }} {{ cita.id_doctor.dni_trabajador.id_datos.apellido_paterno }}</p>
+        <p><strong>Cédula del doctor:</strong> {{ cita.id_doctor.cedula }}</p>
+        <p><strong>Paciente:</strong> {{ cita.id_paciente.id_datos.nombre }} {{ cita.id_paciente.id_datos.apellido_paterno }}</p>
+        <p><strong>Consultorio:</strong> {{ cita.id_consultorio }}</p>
+        <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
+        <p><strong>Hora de inicio:</strong> {{ cita.hora_inicio }}</p>
+        <p><strong>Hora de fin:</strong> {{ cita.hora_fin }}</p>
 
         <form method="post">
-        {% csrf_token %}
-        <div class="form-row">
-            <div>
-                <label for="diagnostico">Diagnóstico:</label>
-                <textarea id="diagnostico" name="diagnostico" rows="4" required></textarea>
+            {% csrf_token %}
+            <div class="form-row">
+                <div>
+                    <label for="diagnostico">Diagnóstico:</label>
+                    <textarea id="diagnostico" name="diagnostico" rows="4" required></textarea>
+                </div>
+                <div>
+                    <label for="tratamiento">Tratamiento:</label>
+                    <textarea id="tratamiento" name="tratamiento" rows="4" required></textarea>
+                </div>
+                <div>
+                    <label for="medicamento">Medicamento:</label>
+                    <select id="medicamento" name="medicamento" required>
+                        <option value="" disabled selected>Seleccione un medicamento</option>
+                        {% for medicamento in medicamentos %}
+                            <option value="{{ medicamento.id_medicamento }}">
+                                {{ medicamento.nombre }} ({{ medicamento.tipo_medicamento }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-            <div>
-                <label for="tratamiento">Tratamiento:</label>
-                <textarea id="tratamiento" name="tratamiento" rows="4" required></textarea>
-            </div>
-            <div>
-                <label for="medicamento">Medicamento:</label>
-                <select id="medicamento" name="medicamento" required>
-                    <option value="" disabled selected>Selecciona un medicamento</option>
-                    {% for medicamento in medicamentos %}
-                        <option value="{{ medicamento.id_medicamento }}">
-                            {{ medicamento.nombre }} ({{ medicamento.tipo_medicamento }})
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <button type="submit">Finalizar Cita</button>
-    </form>
+            <button type="submit">Finalizar Cita</button>
+        </form>
 
-        <a href="{% url 'operation:citas/consultar/doctor' %}">Regresar</a>
+        <!-- Botones adicionales -->
+        <div class="button-container">
+            <a href="{% url 'operation:recetas_crear' %}" class="button-secondary">Crear Receta</a>
+            <a href="{% url 'operation:citas/consultar/doctor' %}">Regresar</a>
+        </div>
     </div>
 </body>
 </html>

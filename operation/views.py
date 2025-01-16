@@ -3,7 +3,6 @@ from django.contrib import messages
 from users.models import *
 from archives.models import *
 from operation.models import *
-from django.utils.timezone import now
 
 
 def datos(request):
@@ -350,6 +349,7 @@ def consultar_citas_doctor(request):
 
     return render(request, 'operation/consultar_citas_doctor.html', {'citas_pendientes': citas_pendientes})
 
+
 def atender_cita(request, cita_id):
     doctor_id = request.session.get('doctor_id')
     if not doctor_id:
@@ -358,33 +358,25 @@ def atender_cita(request, cita_id):
 
     cita = get_object_or_404(Citas, id_cita=cita_id, id_doctor__id=doctor_id)
 
-    current_time = now().time()
-    if not (cita.hora_inicio <= current_time <= cita.hora_fin and cita.fecha == now().date()):
-        messages.warning(request, "No puedes atender esta cita en este momento.")
-        return redirect('operation:citas/consultar/doctor')
-
     medicamentos = Medicamento.objects.all()
 
     if request.method == 'POST':
         diagnostico_descripcion = request.POST.get('diagnostico')
         tratamiento_descripcion = request.POST.get('tratamiento')
-        id_medicamento = request.POST.get('medicamento')  # ID seleccionado
+        id_medicamento = request.POST.get('medicamento')
 
-        # Registrar el diagnóstico
         diagnostico = Diagnostico.objects.create(
             id_doctor=cita.id_doctor,
             id_receta=None,
             diagnostico_descripcion=diagnostico_descripcion
         )
 
-        # Registrar el tratamiento
         Tratamiento.objects.create(
             id_receta=None,
             id_medicamento_id=id_medicamento,
             tratamiento_descripcion=tratamiento_descripcion
         )
 
-        # Eliminar la cita
         cita.delete()
         messages.success(request, "La cita ha sido finalizada exitosamente con diagnóstico y tratamiento registrados.")
         return redirect('operation:citas/consultar/doctor')
@@ -395,6 +387,42 @@ def atender_cita(request, cita_id):
     })
 
 
+def crear_receta(request, cita_id=None):
+    if request.method == 'POST':
+        doctor_cedula = request.POST.get('doctor_id')
+        paciente_id = request.POST.get('paciente_id')
+        receta_descripcion = request.POST.get('receta_descripcion')
+        tratamientos_data = request.POST.getlist('tratamientos')
+
+        receta = Receta.objects.create(
+            id_doctor=get_object_or_404(Doctor, cedula=doctor_cedula),
+            id_paciente=get_object_or_404(Paciente, id=paciente_id),
+            receta_descripcion=receta_descripcion
+        )
+
+        for tratamiento_id in tratamientos_data:
+            tratamiento = get_object_or_404(Tratamiento, id_tratamiento=tratamiento_id)
+            tratamiento.id_receta = receta
+            tratamiento.save()
+
+        messages.success(request, "Receta creada exitosamente.")
+        return redirect('operation:citas/atender', cita_id=cita_id)
+
+    doctores = Doctor.objects.all()
+    pacientes = Paciente.objects.all()
+    tratamientos = Tratamiento.objects.filter(id_receta__isnull=True)
+
+    return render(request, 'operation/crear_receta.html', {
+        'doctores': doctores,
+        'pacientes': pacientes,
+        'tratamientos': tratamientos,
+        'cita_id': cita_id
+    })
 
 
+def listar_recetas(request):
+    recetas = Receta.objects.all()
 
+    return render(request, 'operation/listar_recetas.html', {
+        'recetas': recetas
+    })

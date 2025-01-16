@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Receta</title>
+    <link rel="stylesheet" href="{% static 'operation/css/crear_receta.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Crear Receta</h1>
+        <form method="post">
+            {% csrf_token %}
+            <!-- Seleccionar Doctor -->
+            <div>
+                <label for="doctor_id">Doctor:</label>
+                <select id="doctor_id" name="doctor_id" required>
+                    <option value="" disabled selected>Seleccione un doctor</option>
+                    {% for doctor in doctores %}
+                        <option value="{{ doctor.cedula }}">
+                            {{ doctor.dni_trabajador.id_datos.nombre }} {{ doctor.dni_trabajador.id_datos.apellido_paterno }} - {{ doctor.id_especialidad.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Seleccionar Paciente -->
+            <div>
+                <label for="paciente_id">Paciente:</label>
+                <select id="paciente_id" name="paciente_id" required>
+                    <option value="" disabled selected>Seleccione un paciente</option>
+                    {% for paciente in pacientes %}
+                        <option value="{{ paciente.id }}">
+                            {{ paciente.id_datos.nombre }} {{ paciente.id_datos.apellido_paterno }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Descripción de la Receta -->
+            <div>
+                <label for="receta_descripcion">Descripción de la receta:</label>
+                <textarea id="receta_descripcion" name="receta_descripcion" rows="4" required></textarea>
+            </div>
+
+            <!-- Seleccionar Tratamientos -->
+            <div>
+                <label for="tratamientos">Tratamientos:</label>
+                <select id="tratamientos" name="tratamientos" multiple required>
+                    {% for tratamiento in tratamientos %}
+                        <option value="{{ tratamiento.id_tratamiento }}">
+                            {{ tratamiento.tratamiento_descripcion }} - {{ tratamiento.id_medicamento.nombre }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Botón para crear receta -->
+            <button type="submit">Crear Receta</button>
+        </form>
+
+        <!-- Botón para regresar -->
+        <div class="button-container">
+            <a href="{% url 'operation:citas/atender' cita_id=cita.id_cita %}" class="button-secondary">Regresar</a>
+        </div>
+    </div>
+</body>
+</html>

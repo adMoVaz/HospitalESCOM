@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Recetas</title>
+    <link rel="stylesheet" href="{% static 'operation/css/listar_recetas.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Recetas Creadas</h1>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Doctor</th>
+                        <th>Paciente</th>
+                        <th>Descripción</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for receta in recetas %}
+                    <tr>
+                        <td>{{ receta.id_receta }}</td>
+                        <td>{{ receta.id_doctor.dni_trabajador.id_datos.nombre }} ({{ receta.id_doctor.cedula }})</td>
+                        <td>{{ receta.id_paciente.id_datos.nombre }} {{ receta.id_paciente.id_datos.apellido_paterno }}</td>
+                        <td>{{ receta.receta_descripcion }}</td>
+                        <td>{{ receta.fecha_creacion }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="button-container">
+            <a href="{% url 'operation:recetas_crear' %}">Crear Nueva Receta</a>
+        </div>
+    </div>
+</body>
+</html>
+

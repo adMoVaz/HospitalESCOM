@@ -1,3 +1,4 @@
+/* recetas.css */
 body {
     font-family: Arial, sans-serif;
     background-color: #f7f9fc;
@@ -6,7 +7,7 @@ body {
 }
 
 .container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 40px auto;
     background: #ffffff;
     padding: 20px 30px;
@@ -20,34 +21,30 @@ h1 {
     margin-bottom: 20px;
 }
 
-p {
-    font-size: 16px;
-    color: #555;
-    line-height: 1.5;
-}
-
-form div {
+form div,
+.table-wrapper {
     margin-bottom: 15px;
 }
 
 form label {
     font-weight: bold;
-    margin-bottom: 5px;
     display: block;
+    margin-bottom: 5px;
     color: #333;
 }
 
 form textarea,
-form select {
+form select,
+form input[type="text"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 14px;
-    font-family: inherit;
 }
 
-button {
+form button {
+    display: block;
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -56,18 +53,16 @@ button {
     border-radius: 5px;
     font-size: 16px;
     font-weight: bold;
-    text-align: center;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+form button:hover {
     background-color: #0056b3;
 }
 
 a {
     display: inline-block;
-    text-align: center;
     margin-top: 10px;
     color: #007bff;
     text-decoration: none;
@@ -76,4 +71,45 @@ a {
 
 a:hover {
     text-decoration: underline;
+}
+
+/* Table Styles for Listar Recetas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+thead {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+thead th {
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+    background-color: #e6f7ff;
+}
+
+td, th {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
 }
