@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas Pendientes</title>
+    <link rel="stylesheet" href="{% static 'operation/css/consultar_citas_doctor.css' %}">
+</head>
+<body>
+    <h1>Citas Pendientes</h1>
+
+    {% if citas_pendientes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora de Inicio</th>
+                    <th>Hora de Fin</th>
+                    <th>Paciente</th>
+                    <th>Consultorio</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in citas_pendientes %}
+                <tr>
+                    <td>{{ cita.fecha }}</td>
+                    <td>{{ cita.hora_inicio }}</td>
+                    <td>{{ cita.hora_fin }}</td>
+                    <td>{{ cita.id_paciente.id_datos.nombre }} {{ cita.id_paciente.id_datos.apellido_paterno }}</td>
+                    <td>{{ cita.id_consultorio.nombre }}</td>
+                    <td>
+                        <a href="{% url 'operation:citas/atender' cita.id_cita %}" class="btn-atender">Iniciar Atención</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tienes citas pendientes.</p>
+    {% endif %}
+
+    <a href="{% url 'operation:perfil/doctor' %}" class="btn-volver">Volver al Perfil</a>
+</body>
+</html>

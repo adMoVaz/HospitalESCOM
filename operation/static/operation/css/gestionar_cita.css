@@ -1,0 +1,41 @@
+.gestionar-cita-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.cita-detalles p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}

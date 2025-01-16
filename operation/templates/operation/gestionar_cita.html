@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Cita</title>
+    <link rel="stylesheet" href="{% static 'operation/css/gestionar_cita.css' %}">
+</head>
+<body>
+    <div class="gestionar-cita-container">
+        <h1>Gestionar Cita</h1>
+        <div class="cita-detalles">
+            <p><strong>Paciente:</strong> {{ cita.id_paciente.id_datos.nombre }} {{ cita.id_paciente.id_datos.apellido_paterno }}</p>
+            <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
+            <p><strong>Hora de Inicio:</strong> {{ cita.hora_inicio }}</p>
+            <p><strong>Hora de Fin:</strong> {{ cita.hora_fin }}</p>
+            <p><strong>Consultorio:</strong> {{ cita.id_consultorio.nombre }}</p>
+        </div>
+        <div class="gestionar-seccion">
+            <h2>Notas de Atención</h2>
+            <form method="post">
+                {% csrf_token %}
+                <textarea name="notas" rows="5" placeholder="Escribe aquí las notas de la atención..." required></textarea>
+                <button type="submit" class="btn">Guardar Notas</button>
+            </form>
+        </div>
+        <a href="{% url 'operation:citas/consultar/doctor' %}" class="btn-cancel">Finalizar y Volver</a>
+    </div>
+</body>
+</html>

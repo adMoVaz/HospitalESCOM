@@ -3,6 +3,7 @@ from django.contrib import messages
 from users.models import *
 from archives.models import *
 from operation.models import *
+from datetime import datetime
 
 
 def datos(request):
@@ -214,7 +215,6 @@ def agendar_cita(request):
 def consultar_citas_paciente(request):
     usuario_id = request.session.get('usuario_id')
     if not usuario_id:
-        messages.error(request, "Debes iniciar sesión para consultar tus citas")
         return redirect('operation:login/paciente')
 
     try:
@@ -234,7 +234,6 @@ def eliminar_cita(request, cita_id):
     try:
         cita = get_object_or_404(Citas, id_cita=cita_id, id_paciente__id_datos=request.session.get('usuario_id'))
         cita.delete()
-        messages.success(request, "La cita ha sido eliminada exitosamente.")
     except Exception as e:
         messages.error(request, f"Ocurrió un error al intentar eliminar la cita: {str(e)}")
     return redirect('operation:citas/consultar/paciente')
@@ -243,7 +242,6 @@ def eliminar_cita(request, cita_id):
 def modificar_datos_paciente(request):
     usuario_id = request.session.get('usuario_id')
     if not usuario_id:
-        messages.error(request, "Debes iniciar sesión para modificar tus datos.")
         return redirect('operation:login/paciente')
 
     datos = get_object_or_404(Datos, id_datos=usuario_id)
@@ -276,7 +274,6 @@ def modificar_datos_paciente(request):
         if direccion:
             direccion.save()
 
-        messages.success(request, "Tus datos han sido actualizados correctamente.")
         return redirect('operation:perfil/paciente')
 
     return render(request, 'operation/modificar_perfil_paciente.html', {'datos': datos, 'direccion': direccion})
@@ -288,7 +285,6 @@ def modificar_cita(request, cita_id):
         messages.error(request, "Debes iniciar sesión para modificar una cita")
         return redirect('operation:login/paciente')
 
-    # Obtener la cita existente
     cita = get_object_or_404(Citas, id_cita=cita_id, id_paciente__id_datos=usuario_id)
 
     if request.method == 'POST':
@@ -301,7 +297,6 @@ def modificar_cita(request, cita_id):
             hora_fin = request.POST.get('hora_fin')
 
             if hora_inicio >= hora_fin:
-                messages.error(request, "La hora de inicio debe ser anterior a la hora de fin.")
                 return render(request, 'operation/modificar_cita_paciente.html', {
                     'cita': cita,
                     'especialidades': Especialidad.objects.all(),
@@ -316,7 +311,6 @@ def modificar_cita(request, cita_id):
             cita.hora_fin = hora_fin
             cita.save()
 
-            messages.success(request, "Cita modificada exitosamente.")
             return redirect('operation:perfil/paciente')
         except Doctor.DoesNotExist:
             messages.error(request, "El doctor seleccionado no existe.")
@@ -335,3 +329,64 @@ def modificar_cita(request, cita_id):
         'doctores': doctores,
         'consultorios': consultorios
     })
+
+
+def consultar_citas_doctor(request):
+    doctor_id = request.session.get('doctor_id')
+    if not doctor_id:
+        return redirect('operation:login/doctor')
+
+    try:
+        doctor = Doctor.objects.get(id=doctor_id)
+        citas_pendientes = Citas.objects.filter(
+            id_doctor=doctor, estatus=False
+        ).select_related(
+            'id_paciente', 'id_paciente__id_datos', 'id_consultorio'
+        ).order_by('fecha', 'hora_inicio')
+
+    except Doctor.DoesNotExist:
+        messages.error(request, "No se encontró al doctor.")
+        return redirect('operation:login/doctor')
+
+    return render(request, 'operation/consultar_citas_doctor.html', {'citas_pendientes': citas_pendientes})
+
+
+def atender_cita(request, cita_id):
+    doctor_id = request.session.get('doctor_id')
+    if not doctor_id:
+        return redirect('operation:login/doctor')
+
+    try:
+        cita = get_object_or_404(Citas, id_cita=cita_id, id_doctor__id=doctor_id)
+        ahora = datetime.now()
+        if cita.fecha != ahora.date():
+            return redirect('operation:citas/consultar/doctor')
+
+        if not (cita.hora_inicio <= ahora.time() <= cita.hora_fin):
+            return redirect('operation:citas/consultar/doctor')
+
+        cita.estatus = True
+        cita.save()
+
+        return redirect('operation:gestionar_cita', cita_id=cita.id_cita)
+
+    except Citas.DoesNotExist:
+        messages.error(request, "La cita no existe o no está asignada a este doctor.")
+        return redirect('operation:citas/consultar/doctor')
+
+    except Exception as e:
+        messages.error(request, f"Ocurrió un error al intentar iniciar la cita: {e}")
+        return redirect('operation:citas/consultar/doctor')
+
+def gestionar_cita(request, cita_id):
+    doctor_id = request.session.get('doctor_id')
+    if not doctor_id:
+        messages.error(request, "Debes iniciar sesión como doctor para gestionar una cita.")
+        return redirect('operation:login/doctor')
+    try:
+        cita = get_object_or_404(Citas, id_cita=cita_id, id_doctor__id=doctor_id)
+        return render(request, 'operation/gestionar_cita.html', {'cita': cita})
+    except Citas.DoesNotExist:
+        messages.error(request, "La cita no existe o no está asignada a este doctor.")
+        return redirect('operation:citas/consultar/doctor')
+
