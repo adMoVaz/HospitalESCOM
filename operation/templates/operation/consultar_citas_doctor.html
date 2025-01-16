@@ -31,7 +31,7 @@
                     <td>{{ cita.id_paciente.id_datos.nombre }} {{ cita.id_paciente.id_datos.apellido_paterno }}</td>
                     <td>{{ cita.id_consultorio.nombre }}</td>
                     <td>
-                        <a href="{% url 'operation:citas/atender' cita.id_cita %}" class="btn-atender">Iniciar Atención</a>
+                       <a href="{% url 'operation:citas/atender' cita_id=cita.id_cita %}" class="action-item">Atender Cita</a>
                     </td>
                 </tr>
                 {% endfor %}

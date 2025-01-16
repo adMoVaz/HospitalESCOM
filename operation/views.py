@@ -3,7 +3,7 @@ from django.contrib import messages
 from users.models import *
 from archives.models import *
 from operation.models import *
-from datetime import datetime
+from django.utils.timezone import now
 
 
 def datos(request):
@@ -350,43 +350,51 @@ def consultar_citas_doctor(request):
 
     return render(request, 'operation/consultar_citas_doctor.html', {'citas_pendientes': citas_pendientes})
 
-
 def atender_cita(request, cita_id):
     doctor_id = request.session.get('doctor_id')
     if not doctor_id:
+        messages.error(request, "Debes iniciar sesión como doctor para acceder a esta página.")
         return redirect('operation:login/doctor')
 
-    try:
-        cita = get_object_or_404(Citas, id_cita=cita_id, id_doctor__id=doctor_id)
-        ahora = datetime.now()
-        if cita.fecha != ahora.date():
-            return redirect('operation:citas/consultar/doctor')
+    cita = get_object_or_404(Citas, id_cita=cita_id, id_doctor__id=doctor_id)
 
-        if not (cita.hora_inicio <= ahora.time() <= cita.hora_fin):
-            return redirect('operation:citas/consultar/doctor')
-
-        cita.estatus = True
-        cita.save()
-
-        return redirect('operation:gestionar_cita', cita_id=cita.id_cita)
-
-    except Citas.DoesNotExist:
-        messages.error(request, "La cita no existe o no está asignada a este doctor.")
+    current_time = now().time()
+    if not (cita.hora_inicio <= current_time <= cita.hora_fin and cita.fecha == now().date()):
+        messages.warning(request, "No puedes atender esta cita en este momento.")
         return redirect('operation:citas/consultar/doctor')
 
-    except Exception as e:
-        messages.error(request, f"Ocurrió un error al intentar iniciar la cita: {e}")
+    medicamentos = Medicamento.objects.all()
+
+    if request.method == 'POST':
+        diagnostico_descripcion = request.POST.get('diagnostico')
+        tratamiento_descripcion = request.POST.get('tratamiento')
+        id_medicamento = request.POST.get('medicamento')  # ID seleccionado
+
+        # Registrar el diagnóstico
+        diagnostico = Diagnostico.objects.create(
+            id_doctor=cita.id_doctor,
+            id_receta=None,
+            diagnostico_descripcion=diagnostico_descripcion
+        )
+
+        # Registrar el tratamiento
+        Tratamiento.objects.create(
+            id_receta=None,
+            id_medicamento_id=id_medicamento,
+            tratamiento_descripcion=tratamiento_descripcion
+        )
+
+        # Eliminar la cita
+        cita.delete()
+        messages.success(request, "La cita ha sido finalizada exitosamente con diagnóstico y tratamiento registrados.")
         return redirect('operation:citas/consultar/doctor')
 
-def gestionar_cita(request, cita_id):
-    doctor_id = request.session.get('doctor_id')
-    if not doctor_id:
-        messages.error(request, "Debes iniciar sesión como doctor para gestionar una cita.")
-        return redirect('operation:login/doctor')
-    try:
-        cita = get_object_or_404(Citas, id_cita=cita_id, id_doctor__id=doctor_id)
-        return render(request, 'operation/gestionar_cita.html', {'cita': cita})
-    except Citas.DoesNotExist:
-        messages.error(request, "La cita no existe o no está asignada a este doctor.")
-        return redirect('operation:citas/consultar/doctor')
+    return render(request, 'operation/atender_cita.html', {
+        'cita': cita,
+        'medicamentos': medicamentos
+    })
+
+
+
+
 

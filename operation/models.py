@@ -36,7 +36,7 @@ class Pago(models.Model):
 
 class Receta(models.Model):
     id_receta = models.AutoField(primary_key=True, verbose_name="ID de la receta")
-    id_tratamiento = models.ForeignKey('Tratamiento', on_delete=models.CASCADE, verbose_name="Tratamiento")
+    id_tratamiento = models.ForeignKey('Tratamiento', on_delete=models.CASCADE, verbose_name="Tratamiento", null=True, blank=True)
     estatus = models.BooleanField(default=False, verbose_name="Estatus de la receta")
 
     class Meta:
@@ -50,7 +50,7 @@ class Receta(models.Model):
 class Diagnostico(models.Model):
     id_diagnostico = models.AutoField(primary_key=True, verbose_name="ID del diagnóstico")
     id_doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, verbose_name="Doctor")
-    id_receta = models.ForeignKey(Receta, on_delete=models.CASCADE, verbose_name="Receta")
+    id_receta = models.ForeignKey(Receta, on_delete=models.CASCADE, verbose_name="Receta", null=True, blank=True)
     diagnostico_descripcion = models.CharField(max_length=500, verbose_name="Descripción del diagnóstico")
 
     class Meta:
@@ -78,7 +78,7 @@ class Medicamento(models.Model):
 
 class Tratamiento(models.Model):
     id_tratamiento = models.AutoField(primary_key=True, verbose_name="ID del tratamiento")
-    id_receta = models.ForeignKey(Receta, on_delete=models.CASCADE, verbose_name="Receta")
+    id_receta = models.ForeignKey(Receta, on_delete=models.CASCADE, verbose_name="Receta", null=True, blank=True)
     id_medicamento = models.ForeignKey(Medicamento, on_delete=models.CASCADE, verbose_name="Medicamento")
     tratamiento_descripcion = models.CharField(max_length=500, verbose_name="Descripción del tratamiento")
 

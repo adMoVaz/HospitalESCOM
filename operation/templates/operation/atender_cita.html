@@ -8,20 +8,42 @@
     <link rel="stylesheet" href="{% static 'operation/css/atender_cita.css' %}">
 </head>
 <body>
-    <div class="atender-cita-container">
+    <div class="container">
         <h1>Atender Cita</h1>
-        <div class="cita-detalles">
-            <p><strong>Paciente:</strong> {{ cita.id_paciente.id_datos.nombre }} {{ cita.id_paciente.id_datos.apellido_paterno }}</p>
-            <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
-            <p><strong>Hora de Inicio:</strong> {{ cita.hora_inicio }}</p>
-            <p><strong>Hora de Fin:</strong> {{ cita.hora_fin }}</p>
-            <p><strong>Consultorio:</strong> {{ cita.id_consultorio.nombre }}</p>
-        </div>
+        <p>Doctor: {{ cita.id_doctor.dni_trabajador.id_datos.nombre }} {{ cita.id_doctor.dni_trabajador.id_datos.apellido_paterno }}</p>
+        <p>Paciente: {{ cita.id_paciente.id_datos.nombre }} {{ cita.id_paciente.id_datos.apellido_paterno }}</p>
+        <p>Consultorio: {{ cita.id_consultorio }}</p>
+        <p>Fecha: {{ cita.fecha }}</p>
+        <p>Hora de inicio: {{ cita.hora_inicio }}</p>
+        <p>Hora de fin: {{ cita.hora_fin }}</p>
+
         <form method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn">Iniciar Atención</button>
-        </form>
-        <a href="{% url 'operation:citas/consultar/doctor' %}" class="btn-cancel">Cancelar</a>
+        {% csrf_token %}
+        <div class="form-row">
+            <div>
+                <label for="diagnostico">Diagnóstico:</label>
+                <textarea id="diagnostico" name="diagnostico" rows="4" required></textarea>
+            </div>
+            <div>
+                <label for="tratamiento">Tratamiento:</label>
+                <textarea id="tratamiento" name="tratamiento" rows="4" required></textarea>
+            </div>
+            <div>
+                <label for="medicamento">Medicamento:</label>
+                <select id="medicamento" name="medicamento" required>
+                    <option value="" disabled selected>Selecciona un medicamento</option>
+                    {% for medicamento in medicamentos %}
+                        <option value="{{ medicamento.id_medicamento }}">
+                            {{ medicamento.nombre }} ({{ medicamento.tipo_medicamento }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <button type="submit">Finalizar Cita</button>
+    </form>
+
+        <a href="{% url 'operation:citas/consultar/doctor' %}">Regresar</a>
     </div>
 </body>
 </html>

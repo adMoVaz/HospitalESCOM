@@ -20,5 +20,4 @@ urlpatterns = [
     path("citas/modificar/<int:cita_id>/", views.modificar_cita, name="citas/modificar"),
     path("perfil/paciente/modificar", views.modificar_datos_paciente, name="perfil/paciente/modificar"),
     path("citas/atender/<int:cita_id>/", views.atender_cita, name="citas/atender"),
-    path("citas/gestionar/<int:cita_id>/", views.gestionar_cita, name="gestionar_cita"),
 ]
