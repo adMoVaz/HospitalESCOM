@@ -1,94 +1,62 @@
-{% extends 'core/base.html' %}
 {% load static %}
-
-{% block title %}Nueva Cita{% endblock %}
-
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita</title>
     <link rel="stylesheet" href="{% static 'operation/css/agendar_cita.css' %}">
-<div class="appointment-container">
-    <div class="appointment-header">
-        <h1>Nueva Cita</h1>
-        <a href="{% url 'core:core' %}" class="cancel-button">
-            Cancelar Cita
-        </a>
-    </div>
-
-    <div class="appointment-form-section">
-        <form class="appointment-form" method="POST">
-            {% csrf_token %}
-            <div class="input-group">
-                <label for="fecha">Fecha:</label>
-                <input id="fecha" type="date" name="fecha" required />
-            </div>
-            <div class="input-group">
-                <label for="hora">Hora Inicio:</label>
-                <input id="hora" type="time" name="hora" required />
-            </div>
-            <div class="input-group">
-                <label for="hora">Hora Fin:</label>
-                <input id="hora" type="time" name="hora" required />
-            </div>
-            <div class="input-group">
-                <label for="password">Contraseña:</label>
-                <input id="password" type="password" name="password" required />
-            </div>
-            <button type="submit" class="submit-button">Agendar Cita</button>
-        </form>
-
-        <div class="payment-section">
-            <form method="POST" action="{% url 'core:core' %}">
-                {% csrf_token %}
-                <label for="costo">Costo Total:</label>
-                <input id="costo" type="text" value="Auto-generado" readonly />
-                <label for="metodo_pago">Método de Pago:</label>
-                <select id="metodo_pago" name="metodo_pago" required>
-                    <option value="paypal">PayPal</option>
-                    <option value="credit">Tarjeta de Crédito</option>
-                </select>
-                <button type="submit" class="invoice-button">Generar Factura</button>
-            </form>
+</head>
+<body>
+    <h1>Agendar Cita</h1>
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="especialidad">Especialidad:</label>
+            <select id="especialidad" name="especialidad" required>
+                <option value="" disabled selected>Seleccione una especialidad</option>
+                {% for especialidad in especialidades %}
+                    <option value="{{ especialidad.id_especialidad }}">{{ especialidad.nombre }}</option>
+                {% endfor %}
+            </select>
         </div>
 
-        <div class="appointment-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Correo Paciente</th>
-                        <th>Fecha y Hora</th>
-                        <th>Cédula Doctor</th>
-                        <th>Estatus</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Los datos de la tabla se llenarán dinámicamente -->
-                    {% for cita in citas %}
-                    <tr>
-                        <td>{{ cita.correo_paciente }}</td>
-                        <td>{{ cita.fecha }} {{ cita.hora }}</td>
-                        <td>{{ cita.cedula_doctor }}</td>
-                        <td>{{ cita.estatus }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="4">No hay citas registradas.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="form-group">
+            <label for="doctor">Doctor:</label>
+            <select id="doctor" name="doctor" required>
+            <option value="" disabled selected>Seleccione un doctor</option>
+            {% for doctor in doctores %}
+                <option value="{{ doctor.id }}">{{ doctor.dni_trabajador.id_datos.nombre }} - {{ doctor.id_especialidad.nombre }}</option>
+            {% endfor %}
+        </select>
         </div>
-        <br />
-        <div class="cancellation-policy">
-            <hr />
-            <p>
-                Si se cancelan 48 horas antes, se devolverá el 100% del pago efectuado por la consulta.
-                <br />
-                Si se cancelan 24 horas antes se devolverá el 50% del pago efectuado por la consulta.
-                <br />
-                Si cancela después de las 24 horas, no se devolverá el pago efectuado.
-            </p>
-            <button class="save-button">Guardar Cambios</button>
+
+        <div class="form-group">
+            <label for="consultorio">Consultorio:</label>
+            <select id="consultorio" name="consultorio" required>
+                <option value="" disabled selected>Seleccione un consultorio</option>
+                {% for consultorio in consultorios %}
+                    <option value="{{ consultorio.id_consultorio }}">{{ consultorio.nombre }}</option>
+                {% endfor %}
+            </select>
         </div>
-    </div>
-</div>
-{% endblock %}
+
+        <div class="form-group">
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required>
+        </div>
+
+        <div class="form-group">
+            <label for="hora_inicio">Hora de Inicio:</label>
+            <input type="time" id="hora_inicio" name="hora_inicio" required>
+        </div>
+
+        <div class="form-group">
+            <label for="hora_fin">Hora de Fin:</label>
+            <input type="time" id="hora_fin" name="hora_fin" required>
+        </div>
+
+        <button type="submit">Agendar Cita</button>
+    </form>
+</body>
+</html>

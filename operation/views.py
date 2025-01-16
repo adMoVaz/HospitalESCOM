@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from users.models import *
 from archives.models import *
+from operation.models import *
 
 
 def datos(request):
@@ -159,3 +160,86 @@ def perfil_selector(request):
 
     messages.error(request, 'Debes iniciar sesión primero')
     return redirect('operation:login/select')
+
+
+def agendar_cita(request):
+    usuario_id = request.session.get('usuario_id')
+    if not usuario_id:
+        messages.error(request, "Debes iniciar sesión para agendar una cita")
+        return redirect('operation:login/paciente')
+
+    if request.method == 'POST':
+        try:
+            especialidad_id = request.POST.get('especialidad')
+            doctor_id = request.POST.get('doctor')
+            consultorio_id = request.POST.get('consultorio')
+            fecha = request.POST.get('fecha')
+            hora_inicio = request.POST.get('hora_inicio')
+            hora_fin = request.POST.get('hora_fin')
+            print(f"Especialidad: {especialidad_id}, Doctor: {doctor_id}, Consultorio: {consultorio_id}")
+            print(f"Fecha: {fecha}, Hora Inicio: {hora_inicio}, Hora Fin: {hora_fin}")
+            doctor = Doctor.objects.get(id=doctor_id)
+            consultorio = Consultorio.objects.get(id_consultorio=consultorio_id)
+            paciente = Paciente.objects.get(id_datos=usuario_id)
+
+            cita = Citas(
+                id_doctor=doctor,
+                id_paciente=paciente,
+                id_consultorio=consultorio,
+                fecha=fecha,
+                hora_inicio=hora_inicio,
+                hora_fin=hora_fin,
+                estatus=False
+            )
+            cita.save()
+
+            messages.success(request, "Cita agendada exitosamente")
+            return redirect('operation:perfil/paciente')
+        except Doctor.DoesNotExist:
+            messages.error(request, "El doctor seleccionado no existe")
+        except Consultorio.DoesNotExist:
+            messages.error(request, "El consultorio seleccionado no existe")
+        except Paciente.DoesNotExist:
+            messages.error(request, "El paciente no se encontró")
+        except Exception as e:
+            print(f"Error al agendar cita: {e}")
+
+    especialidades = Especialidad.objects.all()
+    doctores = Doctor.objects.all()
+    consultorios = Consultorio.objects.all()
+
+    return render(request, 'operation/agendar_cita.html', {
+        'especialidades': especialidades,
+        'doctores': doctores,
+        'consultorios': consultorios
+    })
+
+def consultar_citas_paciente(request):
+    usuario_id = request.session.get('usuario_id')
+    if not usuario_id:
+        messages.error(request, "Debes iniciar sesión para consultar tus citas")
+        return redirect('operation:login/paciente')
+
+    try:
+        paciente = Paciente.objects.get(id_datos=usuario_id)
+        citas = Citas.objects.filter(id_paciente=paciente).select_related(
+            'id_doctor', 'id_doctor__id_especialidad', 'id_consultorio'
+        ).order_by('fecha', 'hora_inicio')
+
+    except Paciente.DoesNotExist:
+        messages.error(request, "No se encontró el paciente.")
+        return redirect('operation:login/paciente')
+
+    return render(request, 'operation/consultar_citas_paciente.html', {'citas': citas})
+
+
+def eliminar_cita(request, cita_id):
+    try:
+        cita = get_object_or_404(Citas, id_cita=cita_id, id_paciente__id_datos=request.session.get('usuario_id'))
+        cita.delete()
+        messages.success(request, "La cita ha sido eliminada exitosamente.")
+    except Exception as e:
+        messages.error(request, f"Ocurrió un error al intentar eliminar la cita: {str(e)}")
+    return redirect('operation:citas/consultar/paciente')
+
+

@@ -94,6 +94,7 @@ class Horario(models.Model):
 
 class Consultorio(models.Model):
     id_consultorio = models.AutoField(primary_key=True, verbose_name="ID de consultorio")
+    nombre = models.CharField(max_length=50, verbose_name="Nombre del consultorio", null=True, blank=True)
     id_doctor = models.ForeignKey(
         "users.Doctor",
         on_delete=models.CASCADE,

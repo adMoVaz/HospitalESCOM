@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Citas</title>
+    <link rel="stylesheet" href="{% static 'operation/css/consultar_citas_paciente.css' %}">
+</head>
+<body>
+    <h1>Mis Citas</h1>
+
+    {% if citas %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora de Inicio</th>
+                    <th>Hora de Fin</th>
+                    <th>Doctor</th>
+                    <th>Especialidad</th>
+                    <th>Consultorio</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in citas %}
+                <tr>
+                    <td>{{ cita.fecha }}</td>
+                    <td>{{ cita.hora_inicio }}</td>
+                    <td>{{ cita.hora_fin }}</td>
+                    <td>{{ cita.id_doctor.dni_trabajador.id_datos.nombre }}</td>
+                    <td>{{ cita.id_doctor.id_especialidad.nombre }}</td>
+                    <td>{{ cita.id_consultorio.nombre }}</td>
+                    <td>
+                        <a href="{% url 'operation:citas/consultar/paciente/eliminar' cita.id_cita %}"
+                           onclick="return confirm('¿Estás seguro de que deseas eliminar esta cita?');">
+                            Eliminar
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tienes citas agendadas.</p>
+    {% endif %}
+
+    <a href="{% url 'operation:perfil/paciente' %}" class="btn">Volver al Perfil</a>
+</body>
+</html>

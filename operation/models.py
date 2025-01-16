@@ -1,12 +1,14 @@
 from django.db import models
 
 from users.models import Doctor, Paciente
+from archives.models import Consultorio
 
 
 class Citas(models.Model):
     id_cita = models.AutoField(primary_key=True, verbose_name="ID de la cita")
     id_doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, verbose_name="Doctor")
     id_paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, verbose_name="Paciente")
+    id_consultorio = models.ForeignKey(Consultorio, on_delete=models.CASCADE, verbose_name="Consultorio", null=True, blank=True)
     estatus = models.BooleanField(default=False, verbose_name="Estatus de la cita")
     fecha = models.DateField(verbose_name="Fecha de la cita")
     hora_inicio = models.TimeField(verbose_name="Hora de inicio")
@@ -15,9 +17,6 @@ class Citas(models.Model):
     class Meta:
         verbose_name = "Cita"
         verbose_name_plural = "Citas"
-
-    def __str__(self):
-        return f"{self.id_cita} - {self.id_doctor} - {self.id_paciente}"
 
 
 class Pago(models.Model):

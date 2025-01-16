@@ -13,4 +13,7 @@ urlpatterns = [
     path("login/doctor", views.iniciar_sesion_doctor, name="login/doctor"),
     path("perfil/doctor", views.perfil_doctor, name="perfil/doctor"),
     path("logout/", views.cerrar_sesion, name="logout"),
+    path("citas/agendar", views.agendar_cita, name='citas/agendar'),
+    path("citas/consultar/paciente", views.consultar_citas_paciente, name='citas/consultar/paciente'),
+    path("citas/consultar/paciente/eliminar/<int:cita_id>/", views.eliminar_cita, name='citas/consultar/paciente/eliminar'),
 ]
